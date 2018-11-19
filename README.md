@@ -2,8 +2,9 @@
 
 Extra LEGO EV3 natives for mario js, related to mario_js project.
 
-.Compile: 
+.build: 
 
 	export CROSS_COMPILE=arm-none-linux-gnueabi-
+	export MARIO_VM=\<mario source path\>
 	
-	then recompile mario_runtime project and this one.
+	then recompile the whole project.
