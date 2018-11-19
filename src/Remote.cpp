@@ -4,16 +4,6 @@
 
 using namespace ev3dev;
 
-static remote_control* getRemote(var_t* c) {
-	var_t* thisV = get_obj(c, THIS);
-	var_t* n = get_obj(thisV, "remote");
-	if(n == NULL)
-		return NULL;
-
-	remote_control* m = (remote_control*)n->value;
-	return m;
-}
-
 static void _destroyRemote(void* p) {
 	remote_control* m = (remote_control*)p;
 	if(m == NULL)
@@ -21,7 +11,7 @@ static void _destroyRemote(void* p) {
 	delete m;
 }
 
-#define GET_REMOTE remote_control* remote = getRemote(env); \
+#define GET_REMOTE remote_control* remote = (remote_control*)get_raw(env, THIS); \
 	if(remote == NULL)\
 		return NULL;
 
@@ -38,17 +28,17 @@ static std::function<void(bool)> remoteEvent(vm_t* vm, var_t* thisV, const char*
 }
 
 var_t* JSRemote::constructor(vm_t* vm, var_t* env, void *) {
-	var_t* thisV = get_obj(env, THIS);
 	int channel = get_int(env, "channel");
 	remote_control* m = new remote_control(channel);
+	var_t* thisV = var_new_obj(m, _destroyRemote);
 	m->on_red_up = remoteEvent(vm, thisV, "RED_UP");
 	m->on_red_down = remoteEvent(vm, thisV, "RED_DOWN");
 	m->on_blue_up = remoteEvent(vm, thisV, "BLUE_UP");
 	m->on_blue_down = remoteEvent(vm, thisV, "BLUE_DOWN");
 	m->on_beacon = remoteEvent(vm, thisV, "BEACON");
 	
-	var_t* v = var_new_obj(m, _destroyRemote);
-	var_add(thisV, "remote", v);
+	var_t* protoV = get_obj(env, PROTOTYPE);
+  var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }
 

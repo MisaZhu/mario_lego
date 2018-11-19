@@ -5,16 +5,6 @@
 using namespace ev3dev;
 using namespace std;
 
-static infrared_sensor* getInfrared(var_t* env) {
-	var_t* thisV = get_obj(env, THIS);
-	var_t* n = get_obj(thisV, "infrared");
-	if(n == NULL)
-		return NULL;
-
-	infrared_sensor* m = (infrared_sensor*)n->value;
-	return m;
-}
-
 static void _destroyInfrared(void* p) {
 	infrared_sensor* m = (infrared_sensor*)p;
 	if(m == NULL)
@@ -22,20 +12,20 @@ static void _destroyInfrared(void* p) {
 	delete m;
 }
 
-#define GET_INFRARED infrared_sensor* infrared = getInfrared(env); \
+#define GET_INFRARED infrared_sensor* infrared = (infrared_sensor*)get_raw(env, THIS); \
 	if(infrared == NULL)\
 		return NULL;
 
 var_t* JSInfrared::constructor(vm_t* vm, var_t* env, void *) {
-	var_t* thisV = get_obj(env, THIS);
 	int port = get_int(env, "port");
 	string ePort = JSPorts::getEV3Port(port);
 	infrared_sensor* m = new infrared_sensor(ePort);
 	if(m->connected())
 		m->set_mode(infrared_sensor::mode_ir_prox);
 	
-	var_t* v = var_new_obj(m, _destroyInfrared);
-	var_add(thisV, "infrared", v);
+	var_t* thisV = var_new_obj(m, _destroyInfrared);
+	var_t* protoV = get_obj(env, PROTOTYPE);
+  var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }
 

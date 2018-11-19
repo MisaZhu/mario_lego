@@ -4,16 +4,6 @@
 
 using namespace ev3dev;
 
-static dc_motor* getMotor(var_t* c) {
-	var_t* thisV = get_obj(c, THIS);
-	var_t* n = get_obj(thisV, "motor");
-	if(n == NULL)
-		return NULL;
-
-	dc_motor* m = (dc_motor*)n->value;
-	return m;
-}
-
 static void _destroyMotor(void* p) {
 	dc_motor* m = (dc_motor*)p;
 	if(m == NULL)
@@ -23,19 +13,18 @@ static void _destroyMotor(void* p) {
 	delete m;
 }
 
-#define GET_MOTOR dc_motor* motor = getMotor(env); \
+#define GET_MOTOR dc_motor* motor = (dc_motor*)get_raw(env, THIS); \
 	if(motor == NULL)\
 		return NULL;
 
 var_t* JSDCMotor::constructor(vm_t* vm, var_t* env, void *) {
-	var_t* thisV = get_obj(env, THIS);
 	int port = get_int(env, "port");
 	std::string ePort = JSPorts::getEV3Port(port);
-
 	dc_motor* m = new dc_motor(ePort);
 	
-	var_t* v = var_new_obj(m, _destroyMotor);
-	var_add(thisV, "motor", v);
+	var_t* thisV = var_new_obj(m, _destroyMotor);
+	var_t* protoV = get_obj(env, PROTOTYPE);
+  var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }
 

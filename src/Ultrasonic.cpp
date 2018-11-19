@@ -5,16 +5,6 @@
 using namespace ev3dev;
 using namespace std;
 
-static ultrasonic_sensor* getUltrasonic(var_t* env) {
-	var_t* thisV = get_obj(env, THIS);
-	var_t* n = get_obj(thisV, "ultrasonic");
-	if(n == NULL)
-		return NULL;
-
-	ultrasonic_sensor* m = (ultrasonic_sensor*)n->value;
-	return m;
-}
-
 static void _destroyUltrasonic(void* p) {
 	ultrasonic_sensor* m = (ultrasonic_sensor*)p;
 	if(m == NULL)
@@ -22,7 +12,7 @@ static void _destroyUltrasonic(void* p) {
 	delete m;
 }
 
-#define GET_ULTRASONIC ultrasonic_sensor* ultrasonic = getUltrasonic(env); \
+#define GET_ULTRASONIC ultrasonic_sensor* ultrasonic = (ultrasonic_sensor*)get_raw(env, THIS); \
 	if(ultrasonic == NULL)\
 		return NULL;
 

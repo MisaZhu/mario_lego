@@ -4,16 +4,6 @@
 
 using namespace ev3dev;
 
-static gyro_sensor* getGyro(var_t* c) {
-	var_t* thisV = get_obj(c, THIS);
-	var_t* n = get_obj(thisV, "gyro");
-	if(n == NULL)
-		return NULL;
-
-	gyro_sensor* m = (gyro_sensor*)n->value;
-	return m;
-}
-
 static void _destroyGyro(void* p) {
 	gyro_sensor* m = (gyro_sensor*)p;
 	if(m == NULL)
@@ -21,18 +11,18 @@ static void _destroyGyro(void* p) {
 	delete m;
 }
 
-#define GET_GYRO gyro_sensor* gyro = getGyro(env); \
+#define GET_GYRO gyro_sensor* gyro = (gyro_sensor*)get_raw(env, THIS); \
 	if(gyro == NULL)\
 		return NULL;
 
 var_t* JSGyro::constructor(vm_t* vm, var_t* env, void *) {
-	var_t* thisV = get_obj(env, THIS);
 	int port = get_int(env, "port");
 	std::string ePort = JSPorts::getEV3Port(port);
 	gyro_sensor* m = new gyro_sensor(ePort);
 	
-	var_t* v = var_new_obj(m, _destroyGyro);
-	var_add(thisV, "gyro", v);
+	var_t* thisV = var_new_obj(m, _destroyGyro);
+	var_t* protoV = get_obj(env, PROTOTYPE);
+  var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }
 

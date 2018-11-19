@@ -5,16 +5,6 @@
 using namespace ev3dev;
 using namespace std;
 
-static lego_port* getPort(var_t* env) {
-	var_t* thisV = get_obj(env, THIS);
-	var_t* n = get_obj(thisV, "port");
-	if(n == NULL)
-		return NULL;
-
-	lego_port* p = (lego_port*)n->value;
-	return p;
-}
-
 static void _destroyPort(void* p) {
 	lego_port* port = (lego_port*)p;
 	if(port == NULL)
@@ -22,18 +12,18 @@ static void _destroyPort(void* p) {
 	delete port;
 }
 
-#define GET_PORT lego_port* port = getPort(env); \
+#define GET_PORT lego_port* port = (lego_port*)get_raw(env, THIS); \
 	if(port == NULL)\
 		return NULL;
 
 var_t* JSPort::constructor(vm_t* vm, var_t *env, void *) {
-	var_t* thisV = get_obj(env, THIS);
 	int port = get_int(env, "port");
 	string ePort = JSPorts::getEV3Port(port);
 	lego_port* p = new lego_port(ePort);
 	
-	var_t* v = var_new_obj(p, _destroyPort);
-	var_add(thisV, "port", v);
+	var_t* thisV = var_new_obj(p, _destroyPort);
+	var_t* protoV = get_obj(env, PROTOTYPE);
+  var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }
 

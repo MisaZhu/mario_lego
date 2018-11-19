@@ -4,16 +4,6 @@
 
 using namespace ev3dev;
 
-static color_sensor* getColor(var_t *c) {
-	var_t* thisV = get_obj(c, THIS);
-	var_t* n = get_obj(thisV, "color");
-	if(n == NULL)
-		return NULL;
-
-	color_sensor* m = (color_sensor*)n->value;
-	return m;
-}
-
 static void _destroyColor(void* p) {
 	color_sensor* m = (color_sensor*)p;
 	if(m == NULL)
@@ -21,19 +11,18 @@ static void _destroyColor(void* p) {
 	delete m;
 }
 
-#define GET_COLOR color_sensor* color = getColor(env); \
+#define GET_COLOR color_sensor* color = (color_sensor*)get_raw(env, THIS); \
 	if(color == NULL)\
 		return NULL;
 
 var_t* JSColorSensor::constructor(vm_t* vm, var_t* env, void *) {
-	var_t* thisV = get_obj(env, THIS);
 	int port = get_int(env, "port");
 	std::string ePort = JSPorts::getEV3Port(port);
 	color_sensor* m = new color_sensor(ePort);
 	
-	var_t* v = var_new_obj(m, _destroyColor);
-	var_add(thisV, "color", v);
-
+	var_t* thisV = var_new_obj(m, _destroyColor);
+	var_t* protoV = get_obj(env, PROTOTYPE);
+  var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }
 

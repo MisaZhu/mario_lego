@@ -4,16 +4,6 @@
 
 using namespace ev3dev;
 
-static servo_motor* getMotor(var_t* c) {
-	var_t* thisV = get_obj(c, THIS);
-	var_t* n = get_obj(thisV, "motor");
-	if(n == NULL)
-		return NULL;
-
-	servo_motor* m = (servo_motor*)n->value;
-	return m;
-}
-
 static void _destroyMotor(void* p) {
 	servo_motor* m = (servo_motor*)p;
 	if(m == NULL)
@@ -23,19 +13,19 @@ static void _destroyMotor(void* p) {
 	delete m;
 }
 
-#define GET_MOTOR servo_motor* motor = getMotor(env); \
+#define GET_MOTOR servo_motor* motor = (servo_motor*)get_raw(env, THIS); \
 	if(motor == NULL)\
 		return NULL;
 
 var_t* JSServoMotor::constructor(vm_t* vm, var_t* env, void *) {
-	var_t* thisV = get_obj(env, THIS);
 	int port = get_int(env, "port");
 	std::string ePort = JSPorts::getEV3Port(port);
 
 	servo_motor* m = new servo_motor(ePort);
 	
-	var_t* v = var_new_obj(m, _destroyMotor);
-	var_add(thisV, "motor", v);
+	var_t* thisV = var_new_obj(m, _destroyMotor);
+	var_t* protoV = get_obj(env, PROTOTYPE);
+  var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }
 

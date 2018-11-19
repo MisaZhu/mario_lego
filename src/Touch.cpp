@@ -4,16 +4,6 @@
 
 using namespace ev3dev;
 
-static touch_sensor* getTouch(var_t* c) {
-	var_t* thisV = get_obj(c, THIS);
-	var_t* n = get_obj(thisV, "touch");
-	if(n == NULL)
-		return NULL;
-
-	touch_sensor* m = (touch_sensor*)n->value;
-	return m;
-}
-
 static void _destroyTouch(void* p) {
 	touch_sensor* m = (touch_sensor*)p;
 	if(m == NULL)
@@ -21,18 +11,18 @@ static void _destroyTouch(void* p) {
 	delete m;
 }
 
-#define GET_TOUCH touch_sensor* touch = getTouch(env); \
+#define GET_TOUCH touch_sensor* touch = (touch_sensor*)get_raw(env, THIS); \
 	if(touch == NULL)\
 		return NULL;
 
 var_t* JSTouch::constructor(vm_t* vm, var_t* env, void *) {
-	var_t* thisV = get_obj(env, THIS);
 	int port = get_int(env, "port");
 	std::string ePort = JSPorts::getEV3Port(port);
 	touch_sensor* m = new touch_sensor(ePort);
 	
-	var_t* v = var_new_obj(m, _destroyTouch);
-	var_add(thisV, "touch", v);
+	var_t* thisV = var_new_obj(m, _destroyTouch);
+	var_t* protoV = get_obj(env, PROTOTYPE);
+  var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }
 
