@@ -9,7 +9,7 @@ let motor = new Motor(Ports.OUT_A);
 let _quit = false;
 
 Button.onEvent = function(event) {
-	dump(event);
+	console.ln(event);
 	if(event.value != InputEvent.PRESSED)
 		return;
 
@@ -27,7 +27,7 @@ Button.onEvent = function(event) {
 
 let remote = new Remote(1);
 remote.onEvent = function(button, state) {
-	dump(button);
+	console.ln(button);
 };
 
 Button.run();
