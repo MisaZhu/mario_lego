@@ -7,7 +7,7 @@ MARIO_LANG = js
 endif
 
 ifeq ($(MARIO_VM),)
-MARIO_VM = ../../mario_vm/vm
+MARIO_VM = ../mario_vm/vm
 endif
 
 CC := $(CROSS_COMPILE)g++
