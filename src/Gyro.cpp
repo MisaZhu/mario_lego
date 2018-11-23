@@ -21,7 +21,7 @@ var_t* JSGyro::constructor(vm_t* vm, var_t* env, void *) {
 	gyro_sensor* m = new gyro_sensor(ePort);
 	
 	var_t* thisV = var_new_obj(m, _destroyGyro);
-	var_t* protoV = get_obj(env, PROTOTYPE);
+	var_t* protoV = get_obj_member(env, PROTOTYPE);
   var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }

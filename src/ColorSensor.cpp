@@ -21,7 +21,7 @@ var_t* JSColorSensor::constructor(vm_t* vm, var_t* env, void *) {
 	color_sensor* m = new color_sensor(ePort);
 	
 	var_t* thisV = var_new_obj(m, _destroyColor);
-	var_t* protoV = get_obj(env, PROTOTYPE);
+	var_t* protoV = get_obj_member(env, PROTOTYPE);
   var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }

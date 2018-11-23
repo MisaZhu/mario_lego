@@ -24,7 +24,7 @@ var_t* JSServoMotor::constructor(vm_t* vm, var_t* env, void *) {
 	servo_motor* m = new servo_motor(ePort);
 	
 	var_t* thisV = var_new_obj(m, _destroyMotor);
-	var_t* protoV = get_obj(env, PROTOTYPE);
+	var_t* protoV = get_obj_member(env, PROTOTYPE);
   var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }
@@ -72,6 +72,6 @@ var_t* JSServoMotor::polarity(vm_t* vm, var_t* env, void *) {
 	std::string p = "";
 	if(motor->connected()) 
 		p = motor->polarity();
-	return var_new_str(vm, p.c_str());
+	return var_new_str(p.c_str());
 }
 

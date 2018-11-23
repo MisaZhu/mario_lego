@@ -30,7 +30,7 @@ var_t* JSMotor::constructor(vm_t* vm, var_t* env, void *) {
 		m = new medium_motor(ePort);
 	
 	var_t* thisV = var_new_obj(m, _destroyMotor);
-	var_t* protoV = get_obj(env, PROTOTYPE);
+	var_t* protoV = get_obj_member(env, PROTOTYPE);
   var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }
@@ -168,7 +168,7 @@ var_t* JSMotor::polarity(vm_t* vm, var_t* env, void *) {
 	string p = "";
 	if(mt->connected()) 
 		p = mt->polarity();
-	return var_new_str(vm, p.c_str());
+	return var_new_str(p.c_str());
 }
 
 var_t* JSMotor::dutyCycle(vm_t* vm, var_t* env, void *) {

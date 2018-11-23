@@ -17,13 +17,13 @@ static void _destroyUltrasonic(void* p) {
 		return NULL;
 
 var_t* JSUltrasonic::constructor(vm_t* vm, var_t* env, void *) {
-	var_t* thisV = get_obj(env, THIS);
 	int port = get_int(env, "port");
 	string ePort = JSPorts::getEV3Port(port);
 	ultrasonic_sensor* m = new ultrasonic_sensor(ePort);
 	
-	var_t* v = var_new_obj(m, _destroyUltrasonic);
-	var_add(thisV, "ultrasonic", v);
+	var_t* thisV = var_new_obj(m, _destroyUltrasonic);
+	var_t* protoV = get_obj_member(env, PROTOTYPE);
+  var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }
 
