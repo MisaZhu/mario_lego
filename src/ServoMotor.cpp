@@ -24,8 +24,7 @@ var_t* JSServoMotor::constructor(vm_t* vm, var_t* env, void *) {
 	servo_motor* m = new servo_motor(ePort);
 	
 	var_t* thisV = var_new_obj(m, _destroyMotor);
-	var_t* protoV = get_obj_member(env, PROTOTYPE);
-  var_add(thisV, PROTOTYPE, protoV);
+	var_from_prototype(thisV, get_obj(env, THIS));
 	return thisV;
 }
 

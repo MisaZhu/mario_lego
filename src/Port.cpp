@@ -22,8 +22,7 @@ var_t* JSPort::constructor(vm_t* vm, var_t *env, void *) {
 	lego_port* p = new lego_port(ePort);
 	
 	var_t* thisV = var_new_obj(p, _destroyPort);
-	var_t* protoV = get_obj_member(env, PROTOTYPE);
-  var_add(thisV, PROTOTYPE, protoV);
+	var_from_prototype(thisV, get_obj(env, THIS));
 	return thisV;
 }
 

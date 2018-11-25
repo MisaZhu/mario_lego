@@ -37,8 +37,7 @@ var_t* JSRemote::constructor(vm_t* vm, var_t* env, void *) {
 	m->on_blue_down = remoteEvent(vm, thisV, "BLUE_DOWN");
 	m->on_beacon = remoteEvent(vm, thisV, "BEACON");
 	
-	var_t* protoV = get_obj_member(env, PROTOTYPE);
-  var_add(thisV, PROTOTYPE, protoV);
+	var_from_prototype(thisV, get_obj(env, THIS));
 	return thisV;
 }
 

@@ -23,8 +23,7 @@ var_t* JSDCMotor::constructor(vm_t* vm, var_t* env, void *) {
 	dc_motor* m = new dc_motor(ePort);
 	
 	var_t* thisV = var_new_obj(m, _destroyMotor);
-	var_t* protoV = get_obj_member(env, PROTOTYPE);
-  var_add(thisV, PROTOTYPE, protoV);
+	var_from_prototype(thisV, get_obj(env, THIS));
 	return thisV;
 }
 
