@@ -20,7 +20,7 @@ var_t* JSGyro::constructor(vm_t* vm, var_t* env, void *) {
 	std::string ePort = JSPorts::getEV3Port(port);
 	gyro_sensor* m = new gyro_sensor(ePort);
 	
-	var_t* thisV = var_new_obj(m, _destroyGyro);
+	var_t* thisV = var_new_obj(vm, m, _destroyGyro);
 	var_from_prototype(thisV, get_obj(env, THIS));
 	return thisV;
 }
@@ -30,7 +30,7 @@ var_t* JSGyro::rate(vm_t* vm, var_t* env, void *) {
 	int r = 0;
 	if(gyro->connected())
 		r = gyro->rate();
-	return var_new_int(r);
+	return var_new_int(vm, r);
 }
 
 var_t* JSGyro::angle(vm_t* vm, var_t* env, void *) {
@@ -38,7 +38,7 @@ var_t* JSGyro::angle(vm_t* vm, var_t* env, void *) {
 	int r = 0;
 	if(gyro->connected())
 		r = gyro->angle();
-	return var_new_int(r);
+	return var_new_int(vm, r);
 }
 
 var_t* JSGyro::angleAndRate(vm_t* vm, var_t* env, void *) {
@@ -46,14 +46,14 @@ var_t* JSGyro::angleAndRate(vm_t* vm, var_t* env, void *) {
 	std::tuple<int, int> r;
 	if(gyro->connected())
 		r = gyro->rate_and_angle();
-	var_t* v = var_new();
-	var_add(v, "angle", var_new_int(std::get<0>(r)));
-	var_add(v, "rate", var_new_int(std::get<1>(r)));
+	var_t* v = var_new(vm);
+	var_add(v, "angle", var_new_int(vm, std::get<0>(r)));
+	var_add(v, "rate", var_new_int(vm, std::get<1>(r)));
 
 	return v;
 }
 
 var_t* JSGyro::connected(vm_t* vm, var_t* env, void *) {
 	GET_GYRO
-	return var_new_int(gyro->connected()?1:0);
+	return var_new_int(vm, gyro->connected()?1:0);
 }

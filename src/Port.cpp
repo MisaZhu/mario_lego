@@ -21,7 +21,7 @@ var_t* JSPort::constructor(vm_t* vm, var_t *env, void *) {
 	string ePort = JSPorts::getEV3Port(port);
 	lego_port* p = new lego_port(ePort);
 	
-	var_t* thisV = var_new_obj(p, _destroyPort);
+	var_t* thisV = var_new_obj(vm, p, _destroyPort);
 	var_from_prototype(thisV, get_obj(env, THIS));
 	return thisV;
 }
@@ -31,7 +31,7 @@ var_t* JSPort::address(vm_t* vm, var_t *env, void *) {
 	string r = "";
 	if(port->connected())
 		r = port->address();
-	return var_new_str(r.c_str());
+	return var_new_str(vm, r.c_str());
 }
 
 var_t* JSPort::mode(vm_t* vm, var_t *env, void *) {
@@ -39,7 +39,7 @@ var_t* JSPort::mode(vm_t* vm, var_t *env, void *) {
 	string r = "";
 	if(port->connected())
 		r = port->mode();
-	return var_new_str(r.c_str());
+	return var_new_str(vm, r.c_str());
 }
 
 var_t* JSPort::driverName(vm_t* vm, var_t *env, void *) {
@@ -47,7 +47,7 @@ var_t* JSPort::driverName(vm_t* vm, var_t *env, void *) {
 	string r = "";
 	if(port->connected())
 		r = port->driver_name();
-	return var_new_str(r.c_str());
+	return var_new_str(vm, r.c_str());
 }
 
 var_t* JSPort::status(vm_t* vm, var_t *env, void *) {
@@ -55,7 +55,7 @@ var_t* JSPort::status(vm_t* vm, var_t *env, void *) {
 	string r = "";
 	if(port->connected())
 		r = port->status();
-	return var_new_str(r.c_str());
+	return var_new_str(vm, r.c_str());
 }
 
 var_t* JSPort::setMode(vm_t* vm, var_t *env, void *) {
@@ -82,10 +82,10 @@ var_t* JSPort::modes(vm_t* vm, var_t *env, void *) {
 	if(port->connected())
 		r = port->modes();
 
-	var_t* v = var_new_array();
+	var_t* v = var_new_array(vm);
 	for(std::set<std::string>::iterator it=r.begin(); it!=r.end(); ++it) {
 		string i = *it;
-		var_add(v, "", var_new_str(i.c_str()));
+		var_add(v, "", var_new_str(vm, i.c_str()));
 	}
 	return v;
 }
@@ -93,5 +93,5 @@ var_t* JSPort::modes(vm_t* vm, var_t *env, void *) {
 var_t* JSPort::connected(vm_t* vm, var_t *env, void *) {
 	GET_PORT
 	int res = port->connected()?1:0;
-	return var_new_int(res);
+	return var_new_int(vm, res);
 }

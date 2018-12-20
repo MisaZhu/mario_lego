@@ -20,7 +20,7 @@ var_t* JSColorSensor::constructor(vm_t* vm, var_t* env, void *) {
 	std::string ePort = JSPorts::getEV3Port(port);
 	color_sensor* m = new color_sensor(ePort);
 	
-	var_t* thisV = var_new_obj(m, _destroyColor);
+	var_t* thisV = var_new_obj(vm, m, _destroyColor);
   var_from_prototype(thisV, get_obj(env, THIS));
 	return thisV;
 }
@@ -30,7 +30,7 @@ var_t* JSColorSensor::ambientLight(vm_t* vm, var_t* env, void *) {
 	int r = 0;
 	if(color->connected())
 		r = color->ambient_light_intensity();
-	return var_new_int(r);
+	return var_new_int(vm, r);
 }
 
 var_t* JSColorSensor::reflectedLight(vm_t* vm, var_t* env, void *) {
@@ -38,7 +38,7 @@ var_t* JSColorSensor::reflectedLight(vm_t* vm, var_t* env, void *) {
 	int r = 0;
 	if(color->connected())
 		r = color->reflected_light_intensity();
-	return var_new_int(r);
+	return var_new_int(vm, r);
 }
 
 var_t* JSColorSensor::color(vm_t* vm, var_t* env, void *) {
@@ -46,7 +46,7 @@ var_t* JSColorSensor::color(vm_t* vm, var_t* env, void *) {
 	int r = 0;
 	if(color->connected())
 		r = color->color();
-	return var_new_int(r);
+	return var_new_int(vm, r);
 }
 
 var_t* JSColorSensor::rgb(vm_t* vm, var_t* env, void *) {
@@ -54,15 +54,15 @@ var_t* JSColorSensor::rgb(vm_t* vm, var_t* env, void *) {
 	std::tuple<int, int, int> r;
 	if(color->connected())
 		r = color->raw();
-	var_t* v = var_new();
-	var_add(v, "r", var_new_int(std::get<0>(r)));
-	var_add(v, "g", var_new_int(std::get<1>(r)));
-	var_add(v, "b", var_new_int(std::get<2>(r)));
+	var_t* v = var_new(vm);
+	var_add(v, "r", var_new_int(vm, std::get<0>(r)));
+	var_add(v, "g", var_new_int(vm, std::get<1>(r)));
+	var_add(v, "b", var_new_int(vm, std::get<2>(r)));
 	
 	return v;
 }
 
 var_t* JSColorSensor::connected(vm_t* vm, var_t* env, void *) {
 	GET_COLOR
-	return var_new_int(color->connected()?1:0);
+	return var_new_int(vm, color->connected()?1:0);
 }

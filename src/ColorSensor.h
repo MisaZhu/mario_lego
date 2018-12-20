@@ -21,14 +21,14 @@ public:
 		//   - 5: Red
 		//   - 6: White
 		//   - 7: Brown
-		vm_reg_var(vm, className, "NoColor", var_new_int(0), true);
-		vm_reg_var(vm, className, "Black", var_new_int(1), true);
-		vm_reg_var(vm, className, "Blue", var_new_int(2), true);
-		vm_reg_var(vm, className, "Green", var_new_int(3), true);
-		vm_reg_var(vm, className, "Yellow", var_new_int(4), true);
-		vm_reg_var(vm, className, "Red", var_new_int(5), true);
-		vm_reg_var(vm, className, "White", var_new_int(6), true);
-		vm_reg_var(vm, className, "Brown", var_new_int(7), true);
+		vm_reg_var(vm, className, "NoColor", var_new_int(vm, 0), true);
+		vm_reg_var(vm, className, "Black", var_new_int(vm, 1), true);
+		vm_reg_var(vm, className, "Blue", var_new_int(vm, 2), true);
+		vm_reg_var(vm, className, "Green", var_new_int(vm, 3), true);
+		vm_reg_var(vm, className, "Yellow", var_new_int(vm, 4), true);
+		vm_reg_var(vm, className, "Red", var_new_int(vm, 5), true);
+		vm_reg_var(vm, className, "White", var_new_int(vm, 6), true);
+		vm_reg_var(vm, className, "Brown", var_new_int(vm, 7), true);
 
 		vm_reg_native(vm, className, "constructor(port)", constructor, NULL);
 		vm_reg_native(vm, className, "ambientLight()", ambientLight, NULL);

@@ -17,20 +17,24 @@ static void _destroyRemote(void* p) {
 
 static std::function<void(bool)> remoteEvent(vm_t* vm, var_t* thisV, const char* button) {
 	return [vm, thisV, button](bool state) {
-		var_t* args = var_new();
-		var_t* bt = var_new_str(button);
-		var_t* st = var_new_int(state ? 1:0);
+		var_t* args = var_new(vm);
+		var_t* bt = var_new_str(vm, button);
+		var_t* st = var_new_int(vm, state ? 1:0);
 
 		var_add(args, "", bt);
 		var_add(args, "", st);
-		interrupt_by_name(vm, thisV, "onEvent", args);
+
+		str_t* s = str_new("");
+		var_to_str(args, s);
+		interrupt_by_name(vm, thisV, "onEvent", s->cstr);
+		str_free(s);
 	};
 }
 
 var_t* JSRemote::constructor(vm_t* vm, var_t* env, void *) {
 	int channel = get_int(env, "channel");
 	remote_control* m = new remote_control(channel);
-	var_t* thisV = var_new_obj(m, _destroyRemote);
+	var_t* thisV = var_new_obj(vm, m, _destroyRemote);
 	m->on_red_up = remoteEvent(vm, thisV, "RED_UP");
 	m->on_red_down = remoteEvent(vm, thisV, "RED_DOWN");
 	m->on_blue_up = remoteEvent(vm, thisV, "BLUE_UP");
@@ -50,5 +54,5 @@ var_t* JSRemote::process(vm_t* vm, var_t* env, void *) {
 
 var_t* JSRemote::connected(vm_t* vm, var_t* env, void *) {
 	GET_REMOTE
-	return var_new_int(remote->connected()?1:0);
+	return var_new_int(vm, remote->connected()?1:0);
 }

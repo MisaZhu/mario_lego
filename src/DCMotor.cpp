@@ -22,7 +22,7 @@ var_t* JSDCMotor::constructor(vm_t* vm, var_t* env, void *) {
 	std::string ePort = JSPorts::getEV3Port(port);
 	dc_motor* m = new dc_motor(ePort);
 	
-	var_t* thisV = var_new_obj(m, _destroyMotor);
+	var_t* thisV = var_new_obj(vm, m, _destroyMotor);
 	var_from_prototype(thisV, get_obj(env, THIS));
 	return thisV;
 }
@@ -50,7 +50,7 @@ var_t* JSDCMotor::runDirect(vm_t* vm, var_t* env, void *) {
 
 var_t* JSDCMotor::connected(vm_t* vm, var_t* env, void *) {
 	GET_MOTOR
-	return var_new_int(motor->connected()?1:0);
+	return var_new_int(vm, motor->connected()?1:0);
 }
 
 var_t* JSDCMotor::setTime(vm_t* vm, var_t* env, void *) {
@@ -83,7 +83,7 @@ var_t* JSDCMotor::polarity(vm_t* vm, var_t* env, void *) {
 	std::string p = "";
 	if(motor->connected()) 
 		p = motor->polarity();
-	return var_new_str(p.c_str());
+	return var_new_str(vm, p.c_str());
 }
 
 var_t* JSDCMotor::dutyCycle(vm_t* vm, var_t* env, void *) {
@@ -91,7 +91,7 @@ var_t* JSDCMotor::dutyCycle(vm_t* vm, var_t* env, void *) {
 	int p = 0;
 	if(motor->connected()) 
 		p = motor->duty_cycle_sp();
-	return var_new_int(p);
+	return var_new_int(vm, p);
 }
 
 var_t* JSDCMotor::setDutyCycle(vm_t* vm, var_t* env, void *) {

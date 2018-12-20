@@ -21,7 +21,7 @@ var_t* JSUltrasonic::constructor(vm_t* vm, var_t* env, void *) {
 	string ePort = JSPorts::getEV3Port(port);
 	ultrasonic_sensor* m = new ultrasonic_sensor(ePort);
 	
-	var_t* thisV = var_new_obj(m, _destroyUltrasonic);
+	var_t* thisV = var_new_obj(vm, m, _destroyUltrasonic);
 	var_from_prototype(thisV, get_obj(env, THIS));
 	return thisV;
 }
@@ -31,11 +31,11 @@ var_t* JSUltrasonic::distance_cm(vm_t* vm, var_t* env, void *) {
 	float f = 0.0;
 	if(ultrasonic->connected())
 		f = ultrasonic->distance_centimeters(true);
-	return var_new_float(f);
+	return var_new_float(vm, f);
 }
 
 var_t* JSUltrasonic::connected(vm_t* vm, var_t* env, void *) {
 	GET_ULTRASONIC
 	int res = ultrasonic->connected()?1:0;
-	return var_new_int(res);
+	return var_new_int(vm, res);
 }

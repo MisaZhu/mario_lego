@@ -23,7 +23,7 @@ var_t* JSInfrared::constructor(vm_t* vm, var_t* env, void *) {
 	if(m->connected())
 		m->set_mode(infrared_sensor::mode_ir_prox);
 	
-	var_t* thisV = var_new_obj(m, _destroyInfrared);
+	var_t* thisV = var_new_obj(vm, m, _destroyInfrared);
 	var_from_prototype(thisV, get_obj(env, THIS));
 	return thisV;
 }
@@ -33,11 +33,11 @@ var_t* JSInfrared::proximity(vm_t* vm, var_t* env, void *) {
 	float f = 0.0;
 	if(infrared->connected())
 		f = infrared->proximity(false);
-	return var_new_float(f);
+	return var_new_float(vm, f);
 }
 
 var_t* JSInfrared::connected(vm_t* vm, var_t* env, void *) {
 	GET_INFRARED
 	int res = infrared->connected()?1:0;
-	return var_new_int(res);
+	return var_new_int(vm, res);
 }

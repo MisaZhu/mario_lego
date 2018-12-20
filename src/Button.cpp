@@ -41,14 +41,15 @@ static void* _buttonThread(void* data) {
     size_t rb = ::read(fd, &ev, sizeof(ev));
     if (rb < sizeof(input_event))
       continue;
-		var_t* v = var_new_obj(NULL, NULL);
-		var_add(v, "type", var_new_int(ev.type));
-		var_add(v, "code", var_new_int(ev.code));
-		var_add(v, "value", var_new_int(ev.value));
+		var_t* v = var_new_obj(vm, NULL, NULL);
+		var_add(v, "type", var_new_int(vm, ev.type));
+		var_add(v, "code", var_new_int(vm, ev.code));
+		var_add(v, "value", var_new_int(vm, ev.value));
 
-		var_t* args = var_new();
-		var_add(args, "", v);
-		interrupt_by_name(vm, obj, "onEvent", args);
+		str_t* s = str_new("");
+		var_to_str(v, s);
+		interrupt_by_name(vm, obj, "onEvent", s->cstr);
+		str_free(s);
   }
 
   return NULL;

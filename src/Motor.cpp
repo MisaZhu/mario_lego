@@ -29,7 +29,7 @@ var_t* JSMotor::constructor(vm_t* vm, var_t* env, void *) {
 	else 
 		m = new medium_motor(ePort);
 	
-	var_t* thisV = var_new_obj(m, _destroyMotor);
+	var_t* thisV = var_new_obj(vm, m, _destroyMotor);
 	var_from_prototype(thisV, get_obj(env, THIS));
 	return thisV;
 }
@@ -65,7 +65,7 @@ var_t* JSMotor::runDirect(vm_t* vm, var_t* env, void *) {
 var_t* JSMotor::connected(vm_t* vm, var_t* env, void *) {
 	GET_MOTOR
 	int res = mt->connected()?1:0;
-	return var_new_int(res);
+	return var_new_int(vm, res);
 }
 
 var_t* JSMotor::setSpeed(vm_t* vm, var_t* env, void *) {
@@ -151,7 +151,7 @@ var_t* JSMotor::countPerRotation(vm_t* vm, var_t* env, void *) {
 	int ct = 0;
 	if(mt->connected()) 
 		ct = mt->count_per_rot();
-	return var_new_int(ct);
+	return var_new_int(vm, ct);
 }
 
 var_t* JSMotor::countPerMeter(vm_t* vm, var_t* env, void *) {
@@ -159,7 +159,7 @@ var_t* JSMotor::countPerMeter(vm_t* vm, var_t* env, void *) {
 	int ct = 0;
 	if(mt->connected()) 
 		ct = mt->count_per_m();
-	return var_new_int(ct);
+	return var_new_int(vm, ct);
 }
 
 var_t* JSMotor::polarity(vm_t* vm, var_t* env, void *) {
@@ -167,7 +167,7 @@ var_t* JSMotor::polarity(vm_t* vm, var_t* env, void *) {
 	string p = "";
 	if(mt->connected()) 
 		p = mt->polarity();
-	return var_new_str(p.c_str());
+	return var_new_str(vm, p.c_str());
 }
 
 var_t* JSMotor::dutyCycle(vm_t* vm, var_t* env, void *) {
@@ -175,7 +175,7 @@ var_t* JSMotor::dutyCycle(vm_t* vm, var_t* env, void *) {
 	int p = 0;
 	if(mt->connected()) 
 		p = mt->duty_cycle_sp();
-	return var_new_int(p);
+	return var_new_int(vm, p);
 }
 
 var_t* JSMotor::fullTravelCount(vm_t* vm, var_t* env, void *) {
@@ -183,7 +183,7 @@ var_t* JSMotor::fullTravelCount(vm_t* vm, var_t* env, void *) {
 	int p = 0;
 	if(mt->connected()) 
 		p = mt->full_travel_count();
-	return var_new_int(p);
+	return var_new_int(vm, p);
 }
 
 var_t* JSMotor::maxSpeed(vm_t* vm, var_t* env, void *) {
@@ -191,7 +191,7 @@ var_t* JSMotor::maxSpeed(vm_t* vm, var_t* env, void *) {
 	int p = 0;
 	if(mt->connected()) 
 		p = mt->max_speed();
-	return var_new_int(p);
+	return var_new_int(vm, p);
 }
 
 var_t* JSMotor::setDutyCycle(vm_t* vm, var_t* env, void *) {

@@ -20,7 +20,7 @@ var_t* JSTouch::constructor(vm_t* vm, var_t* env, void *) {
 	std::string ePort = JSPorts::getEV3Port(port);
 	touch_sensor* m = new touch_sensor(ePort);
 	
-	var_t* thisV = var_new_obj(m, _destroyTouch);
+	var_t* thisV = var_new_obj(vm, m, _destroyTouch);
 	var_from_prototype(thisV, get_obj(env, THIS));
 	return thisV;
 }
@@ -30,10 +30,10 @@ var_t* JSTouch::pressed(vm_t* vm, var_t* env, void *) {
 	bool r = false;
 	if(touch->connected())
 		r = touch->is_pressed();
-	return var_new_int(r?1:0);
+	return var_new_int(vm, r?1:0);
 }
 
 var_t* JSTouch::connected(vm_t* vm, var_t* env, void *) {
 	GET_TOUCH
-	return var_new_int(touch->connected()?1:0);
+	return var_new_int(vm, touch->connected()?1:0);
 }
