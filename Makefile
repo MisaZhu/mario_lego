@@ -7,7 +7,7 @@ MARIO_LANG = js
 endif
 
 ifeq ($(MARIO_VM),)
-MARIO_VM = ../mario_vm/vm
+MARIO_VM = ../mario_vm
 endif
 
 CC := $(CROSS_COMPILE)g++
@@ -15,7 +15,12 @@ CXX := $(CROSS_COMPILE)g++
 AR := $(CROSS_COMPILE)ar
 LD := $(CROSS_COMPILE)g++
 
-mario_OBJS= $(MARIO_VM)/mario_utils.o $(MARIO_VM)/mario_bc.o $(MARIO_VM)/mario_vm.o
+mario_OBJS= $(MARIO_VM)/utils/mario_basic.o \
+						$(MARIO_VM)/utils/mario_array.o \
+						$(MARIO_VM)/utils/mario_string.o \
+						$(MARIO_VM)/vm/mario_bc.o \
+						$(MARIO_VM)/vm/mario_vm.o \
+						$(MARIO_VM)/vm/mario_lex.o
 
 OBJS= $(mario_OBJS) \
 	src/native_ev3.o \
@@ -34,8 +39,7 @@ OBJS= $(mario_OBJS) \
 	src/ColorSensor.o \
 	src/ev3dev.o
 
-
-CXXFLAGS =  -I$(MARIO_VM) -g -Wall -DMARIO_DEBUG -DMARIO_CACHE -fPIC -std=c++0x  -I. -DEV3DEV_PLATFORM=EV3
+CXXFLAGS =  -I$(MARIO_VM)/utils -I$(MARIO_VM)/vm -g -Wall -DMARIO_DEBUG -DMARIO_CACHE -fPIC -std=c++0x  -I. -DEV3DEV_PLATFORM=EV3
 LDFLAGS = -lstdc++
 
 CXXFLAGS +=  -DMARIO_THREAD
