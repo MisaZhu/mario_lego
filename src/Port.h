@@ -1,7 +1,7 @@
 #ifndef JSM_JSPort
 #define JSM_JSPort
 
-#include "mario_vm.h"
+#include "mario.h"
 
 class JSPort {
 	static var_t* constructor(vm_t* vm, var_t *env, void *);
@@ -15,7 +15,8 @@ class JSPort {
 	static var_t* connected(vm_t* vm, var_t *env, void *);
 
 public:
-	static inline void regNative(vm_t* vm, const char* cls) {
+	static inline void regNative(vm_t* vm, const char* clsname) {
+		var_t* cls = vm_new_class(vm, clsname);
 		vm_reg_native(vm, cls, "constructor(port)", constructor, NULL);
 		vm_reg_native(vm, cls, "address()", address, NULL);
 		vm_reg_native(vm, cls, "modes()", mode, NULL);

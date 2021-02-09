@@ -1,7 +1,7 @@
 #ifndef JSM_JSMotor
 #define JSM_JSMotor
 
-#include "mario_vm.h"
+#include "mario.h"
 
 class JSMotor {
 	static var_t* constructor(vm_t* vm, var_t *env, void *);
@@ -28,7 +28,8 @@ class JSMotor {
 	static var_t* maxSpeed(vm_t* vm, var_t *env, void *);
 	
 public:
-	inline static void regNative(vm_t* vm, const char* cls) {
+	inline static void regNative(vm_t* vm, const char* clsname) {
+		var_t* cls = vm_new_class(vm, clsname);
 		vm_reg_native(vm, cls, "constructor(port)", constructor, NULL);
 		vm_reg_native(vm, cls, "stop()", stop, NULL);
 		vm_reg_native(vm, cls, "run()", run, NULL);

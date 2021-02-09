@@ -32,7 +32,7 @@ static void* _buttonThread(void* data) {
 
   int fd = open("/dev/input/by-path/platform-gpio-keys.0-event", O_RDONLY);
   if (fd  < 0) {
-    _debug("Couldn't open platform-gpio-keys device!\n");
+    mario_debug("Couldn't open platform-gpio-keys device!\n");
     return NULL;
   }
 
@@ -62,7 +62,7 @@ var_t* JSButton::run(vm_t* vm, var_t* env, void *) {
 	_data.obj = get_obj(env, THIS);
 
 	if(_data.obj == NULL) {
-		_debug("Button.run() THIS obj is null\n");
+		mario_debug("Button.run() THIS obj is null\n");
 		return NULL;
 	}
 

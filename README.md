@@ -1,6 +1,6 @@
 # mario_natives
 
-Extra LEGO EV3 natives for mario js, related to mario_js project.
+Extra LEGO EV3 natives for mario js, related to https://github.com/misazhu/mario_vm.git project.
 
 .build: 
 

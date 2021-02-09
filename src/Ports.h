@@ -1,7 +1,7 @@
 #ifndef JSM_JSPorts
 #define JSM_JSPorts
 
-#include "mario_vm.h"
+#include "mario.h"
 #include <string>
 
 class JSPorts {
@@ -19,18 +19,19 @@ class JSPorts {
 
 public:
 	static std::string getEV3Port(int port);
-	static void regNative(vm_t* vm, const char* cls) {
-	vm_reg_var(vm, cls, "OUT_AUTO", var_new_int(vm, OUT_AUTO), true);
-	vm_reg_var(vm, cls, "OUT_A", var_new_int(vm, OUT_A), true);
-	vm_reg_var(vm, cls, "OUT_B", var_new_int(vm, OUT_B), true);
-	vm_reg_var(vm, cls, "OUT_C", var_new_int(vm, OUT_C), true);
-	vm_reg_var(vm, cls, "OUT_D", var_new_int(vm, OUT_D), true);
-	vm_reg_var(vm, cls, "IN_AUTO", var_new_int(vm, IN_AUTO), true);
-	vm_reg_var(vm, cls, "IN_1", var_new_int(vm, IN_1), true);
-	vm_reg_var(vm, cls, "IN_2", var_new_int(vm, IN_2), true);
-	vm_reg_var(vm, cls, "IN_3", var_new_int(vm, IN_3), true);
-	vm_reg_var(vm, cls, "IN_4", var_new_int(vm, IN_4), true);
-}
+	static void regNative(vm_t* vm, const char* clsname) {
+		var_t* cls = vm_new_class(vm, clsname);
+		vm_reg_var(vm, cls, "OUT_AUTO", var_new_int(vm, OUT_AUTO), true);
+		vm_reg_var(vm, cls, "OUT_A", var_new_int(vm, OUT_A), true);
+		vm_reg_var(vm, cls, "OUT_B", var_new_int(vm, OUT_B), true);
+		vm_reg_var(vm, cls, "OUT_C", var_new_int(vm, OUT_C), true);
+		vm_reg_var(vm, cls, "OUT_D", var_new_int(vm, OUT_D), true);
+		vm_reg_var(vm, cls, "IN_AUTO", var_new_int(vm, IN_AUTO), true);
+		vm_reg_var(vm, cls, "IN_1", var_new_int(vm, IN_1), true);
+		vm_reg_var(vm, cls, "IN_2", var_new_int(vm, IN_2), true);
+		vm_reg_var(vm, cls, "IN_3", var_new_int(vm, IN_3), true);
+		vm_reg_var(vm, cls, "IN_4", var_new_int(vm, IN_4), true);
+	}
 
 };
 
